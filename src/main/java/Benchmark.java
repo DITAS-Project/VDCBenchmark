@@ -1,3 +1,4 @@
+import model.RichRequest;
 import model.SimpleResult;
 import okhttp3.Request;
 import org.apache.log4j.Logger;
@@ -21,10 +22,10 @@ public class Benchmark {
                         //"190afbef-5c10-4fd9-bb11-515f57b93eab.mock.pstmn.io/test/*")
                 .get()
                 .build();*/
-        List<Request> request = RequestFactory.getRequest("/request.json");
+        List<RichRequest> request = RequestFactory.getRichRequests("/request.json");
         int warmup= 5;
         int benchmark=20;
-        List<SimpleResult> results = runner.benchmarkRequest(request.get(0), warmup, benchmark);
+        List<SimpleResult> results = runner.multithreadBenchmark(request.get(0), warmup, benchmark);
         LongSummaryStatistics collect = results.stream().map(SimpleResult::getTime).collect(LongSummaryStatistics::new,
                 LongSummaryStatistics::accept,
                 LongSummaryStatistics::combine);

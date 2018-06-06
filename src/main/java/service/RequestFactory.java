@@ -23,27 +23,39 @@ private static ObjectMapper mapper= new ObjectMapper();
         LinkedList<Request> results= new LinkedList<>();
 
         for(RichRequest rr: requests){
-            Request parsed;
             SimpleRequest re= rr.getRequest();
-            if(re.getMethod().equals("GET")){
-                parsed= new Request.Builder()
-                        .headers(Headers.of(re.getHeaders()))
-                        .url(re.getUrl())
-                        .get()
-                        .build();
-            }else {
-                parsed = new Request.Builder()
-                        .method(re.getMethod(), RequestBody.create(MediaType.parse("application/json"), re.body.toString()))
-                        .headers(Headers.of(re.getHeaders()))
-                        .url(re.getUrl())
-                        .build();
-            }
+            Request parsed = parseRequest(re);
             results.add(parsed);
         }
         return results;
     }
 
+    private static Request parseRequest(SimpleRequest re) {
+        Request parsed;
+        if(re.getMethod().equals("GET")){
+            parsed= new Request.Builder()
+                    .headers(Headers.of(re.getHeaders()))
+                    .url(re.getUrl())
+                    .get()
+                    .build();
+        }else {
+            parsed = new Request.Builder()
+                    .method(re.getMethod(), RequestBody.create(MediaType.parse("application/json"), re.body.toString()))
+                    .headers(Headers.of(re.getHeaders()))
+                    .url(re.getUrl())
+                    .build();
+        }
+        return parsed;
+    }
+
+
     public static List<Request> getRequest(String filename){
+        List<RichRequest> requests = getRichRequests(filename);
+        return createRequests(requests);
+
+    }
+
+    public static List<RichRequest> getRichRequests(String filename) {
         String raw = readToString(filename);
         List<RichRequest> requests= new LinkedList<>();
         try {
@@ -52,8 +64,11 @@ private static ObjectMapper mapper= new ObjectMapper();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return createRequests(requests);
+        return requests;
+    }
 
+    public static Request getRequest(SimpleRequest request){
+     return parseRequest(request);
     }
 
     private static String readToString(String filename) {
