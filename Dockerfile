@@ -9,4 +9,4 @@ RUN mvn install compile -DskipTests
 #the runtime
 EXPOSE 8080
 
-CMD ["mvn","run"]
+CMD ["java","-cp", "VDCBenchmark-1.0-SNAPSHOT.jar", "de.tub.Benchmark"]
