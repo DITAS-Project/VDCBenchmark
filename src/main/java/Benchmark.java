@@ -38,10 +38,5 @@ public class Benchmark {
         int not200 = results.size() - results.stream().filter((SimpleResult s) -> s.getStatus() == 200).collect(Collectors.toList()).size();
         log.info("Percentage of not 200 codes: " + (not200 / results.size()) * 100);
 
-        //request aus datei
-        //dockerize
-        //helpermethoden zum Request bauen
-
-
     }
 }

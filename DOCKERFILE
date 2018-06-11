@@ -9,4 +9,4 @@ RUN mvn install compile -DskipTests
 #the runtime
 EXPOSE 8080
 
-CMD ["mvn","spring-boot:run"]
+CMD ["mvn","run"]
